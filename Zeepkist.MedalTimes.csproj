@@ -26,10 +26,17 @@
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.0.8"  PrivateAssets="all" ExcludeAssets="runtime" />
-        <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all" ExcludeAssets="runtime"/>
+        <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" ExcludeAssets="runtime"/>
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all" ExcludeAssets="runtime" />
-        <PackageReference Include="Zeepkist.GameLibs" Version="18.7.2061" PrivateAssets="all" ExcludeAssets="runtime" />
-        <PackageReference Include="ZeepSDK" Version="2.7.2" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="Zeepkist.GameLibs" Version="18.10.2087" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="ZeepSDK" Version="2.7.5" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="StrawberryShake.Transport.Http" Version="14.3.2" />
+        <!-- Match GTR's resolved runtime versions so both mods can share Unity's assembly loader. -->
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+        <PackageReference Include="System.Text.Json" Version="10.0.12" />
+        <PackageReference Include="System.ValueTuple" Version="4.6.2" GeneratePathProperty="true" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -37,6 +44,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="netstandard, Version=2.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+        <Reference Include="netstandard" />
+        <Reference Include="System.Memory"><Aliases>MemoryAlias</Aliases></Reference>
+        <Compile Remove="Zeepkist.MedalTimes.Tests/**/*.cs" />
+        <EmbeddedResource Include="RuntimeAssets/Medals/MED_*.png" />
+        <None Include="$(PkgSystem_ValueTuple)/lib/net47/System.ValueTuple.dll" Link="System.ValueTuple.dll" Visible="false" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

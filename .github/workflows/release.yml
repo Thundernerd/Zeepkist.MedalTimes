@@ -43,6 +43,10 @@ jobs:
       - name: Publish
         run: dotnet publish -c Debug --artifacts-path "C:\out"
 
+      - name: Verify package
+        shell: pwsh
+        run: ./Verify-Package.ps1 "C:\out\publish\${{ steps.csproj.outputs.csproj_name }}\debug"
+
       - name: Get AssemblyName
         id: asm
         uses: ./.github/actions/get-assembly-name

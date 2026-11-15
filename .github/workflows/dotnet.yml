@@ -23,7 +23,23 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore Zeepkist.MedalTimes.csproj
+    - name: Restore tests
+      run: dotnet restore Zeepkist.MedalTimes.Tests/Zeepkist.MedalTimes.Tests.csproj
+    - name: Verify generated client
+      shell: pwsh
+      run: |
+        ./Generate-GraphQLClient.ps1
+        git diff --exit-code -- GraphQL/MedalTimesClient.Client.cs
+        if ($LASTEXITCODE -ne 0) { throw 'Generated client differs from checked-in client' }
     - name: Build
       run: dotnet build Zeepkist.MedalTimes.csproj --no-restore --configuration Release
+    - name: Test
+      run: dotnet test Zeepkist.MedalTimes.Tests/Zeepkist.MedalTimes.Tests.csproj --no-restore --configuration Release
+    - name: Publish and verify package
+      shell: pwsh
+      run: |
+        dotnet publish Zeepkist.MedalTimes.csproj --no-restore --configuration Release --output artifacts/package
+        if ($LASTEXITCODE -ne 0) { throw 'Publish failed' }
+        ./Verify-Package.ps1 artifacts/package
     - name: Audit dependencies
       run: dotnet list Zeepkist.MedalTimes.csproj package --vulnerable --include-transitive
