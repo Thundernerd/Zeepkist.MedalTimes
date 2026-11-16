@@ -1,0 +1,15 @@
+{
+  "schema": "schema.graphql",
+  "documents": "GraphQL/**/*.graphql",
+  "extensions": {
+    "strawberryShake": {
+      "name": "MedalTimesClient",
+      "namespace": "TNRD.Zeepkist.MedalTimes.GraphQL",
+      "outputDirectoryName": "GraphQL",
+      "noStore": false,
+      "url": "https://graphql.zeepki.st",
+      "records": { "inputs": false, "entities": false },
+      "transportProfiles": [{ "default": "Http" }]
+    }
+  }
+}
