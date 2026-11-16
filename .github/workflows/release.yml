@@ -1,48 +1,43 @@
 name: release
 
 on:
-  release:
-    types: [published]
-
-env:
-  GAME_ID: 3213 # Zeepkist
-  MOD_ID: 2095268 # Medal Times
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Which part of the version to bump (from the latest stable tag)
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      stage:
+        description: stable goes to mod.io; alpha/beta/rc only create a GitHub pre-release
+        required: true
+        type: choice
+        default: stable
+        options:
+          - stable
+          - alpha
+          - beta
+          - rc
 
 concurrency:
   group: release
   cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  build:
-    if: github.event.release.prerelease != true
-    uses: ./.github/workflows/build-mod.yml
+  release:
+    uses: donderjoekel/zeepkist-mod-workflows/.github/workflows/release.yml@v1
     with:
-      ref: refs/tags/${{ github.event.release.tag_name }}
-      version: ${{ github.event.release.tag_name }}
-      stable: true
-
-  upload:
-    needs: build
-    runs-on: ubuntu-26.04
-    # Add required reviewers to this environment (Settings → Environments) to gate mod.io uploads.
-    environment: modio
-    steps:
-      - name: Download package
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: ${{ needs.build.outputs.artifact }}
-          path: package
-
-      - name: Upload mod to mod.io
-        uses: Thundernerd/upload-mod-to-modio@306d470f2b096a40315bfda2e4cb39c7ef9e4de4 # v1.0.0
-        with:
-          bearer-token: ${{ secrets.MODIO_BEARER }}
-          game-id: ${{ env.GAME_ID }}
-          mod-id: ${{ env.MOD_ID }}
-          active: true
-          changelog: ${{ github.event.release.body }}
-          file-path: package/${{ needs.build.outputs.zip }}
-          version: ${{ needs.build.outputs.label }}
+      bump: ${{ inputs.bump }}
+      stage: ${{ inputs.stage }}
+      mod-id: 2095268
+      test-projects: |
+        Zeepkist.MedalTimes.Tests/Zeepkist.MedalTimes.Tests.csproj
+      pre-build-script: ./Verify-GraphQLClient.ps1
+      verify-script: ./Verify-Package.ps1
+    secrets: inherit

@@ -30,10 +30,9 @@ Compress-Archive -Path artifacts/package/* -DestinationPath artifacts/MedalTimes
 
 ## Releasing
 
-Both release workflows use `.github/workflows/build-mod.yml`, which runs the GraphQL client check and the tests on the commit being released, then builds and checks the package.
+Go to **Actions → release → Run workflow** and pick a **bump** (patch, minor or major) and a **stage**. A `stable` release goes to GitHub and mod.io. An `alpha`, `beta` or `rc` stage only creates a GitHub pre-release. The version is worked out from the latest git tag (e.g. `5.3.1` + minor + beta → `5.4.0-beta.1`). Don't edit `<Version>` in the csproj; PRs that do are rejected.
 
-- **Pre-release**: run the `pre-release` workflow with a branch and a label like `1.3.0-beta.1`. The tag and GitHub pre-release are created only after the build passes, at the commit that was built, with the zip attached. The csproj version is set to a four-part number for the mod loader (alpha `.1xx`, beta `.2xx`, rc `.3xx`). Pre-releases never go to mod.io.
-- **Stable release**: bump `<Version>` in `Zeepkist.MedalTimes.csproj` and merge it, then publish a GitHub release tagged `vX.Y.Z` at that commit. The workflow fails if the tag isn't plain `X.Y.Z` or doesn't match the csproj. After the build passes, the zip goes to mod.io through the `modio` environment (add required reviewers there to approve uploads by hand).
+The pipeline lives in [donderjoekel/zeepkist-mod-workflows](https://github.com/donderjoekel/zeepkist-mod-workflows). For this mod it also runs the tests, the GraphQL client check (`Verify-GraphQLClient.ps1`) and `Verify-Package.ps1` before anything is tagged.
 
 ## Regenerate GraphQL client
 
