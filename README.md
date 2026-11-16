@@ -23,14 +23,6 @@ Compress-Archive -Path artifacts/package/* -DestinationPath artifacts/MedalTimes
 ## Regenerate GraphQL client
 
 ```powershell
-./Generate-GraphQLClient.ps1
-```
-
-The script restores the tool, generates the client from checked-in schema and query,
-then applies GTR's `System.Memory` alias adjustment for Unity's .NET Framework target.
-No live server is needed for generation. To refresh schema deliberately:
-
-```powershell
 dotnet tool restore
 dotnet graphql update
 ./Generate-GraphQLClient.ps1
