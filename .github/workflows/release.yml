@@ -26,7 +26,7 @@ jobs:
 
   upload:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # Add required reviewers to this environment (Settings → Environments) to gate mod.io uploads.
     environment: modio
     steps:
