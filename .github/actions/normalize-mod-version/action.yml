@@ -20,8 +20,10 @@ runs:
     - name: Normalize version
       id: normalize
       shell: pwsh
+      env:
+        VERSION_INPUT: ${{ inputs.version_input }}
       run: |
-        $raw = "${{ inputs.version_input }}".Trim()
+        $raw = "$env:VERSION_INPUT".Trim()
         $raw = $raw -replace '^v',''
 
         if ([string]::IsNullOrWhiteSpace($raw)) {
