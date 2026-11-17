@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
         <AssemblyName>net.tnrd.zeepkist.medaltimes</AssemblyName>
-        <Version>5.3.1</Version>
+        <Version>5.4.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <RootNamespace>TNRD.Zeepkist.MedalTimes</RootNamespace>
